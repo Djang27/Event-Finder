@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { parseUserQuery } = require("../services/claude");
 const tm = require("../services/ticketmaster");
+const { scoreEvents } = require("../services/gemScorer");
 
 router.post("/search", async (req, res) => {
   const { query } = req.body;
@@ -13,8 +14,8 @@ router.post("/search", async (req, res) => {
   try {
     // Step 1: Ask Claude to parse the query into filters
     const filters = await parseUserQuery(query);
-    
-    // Step 2: Use those filters to fetch real events
+
+    // Step 2: Fetch real events
     const events = await tm.fetchEvents({
       city: filters.city,
       startDate: filters.startDate,
@@ -22,10 +23,13 @@ router.post("/search", async (req, res) => {
       category: filters.category,
     });
 
+    // Step 3: Score and sort events by hidden gem score
+    const scoredEvents = scoreEvents(events);
+
     res.json({
-      filters,          // send back so frontend can show what Claude understood
-      count: events.length,
-      events,
+      filters,
+      count: scoredEvents.length,
+      events: scoredEvents,
     });
   } catch (err) {
     console.error(err.message);
