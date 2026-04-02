@@ -23,8 +23,17 @@ router.post("/search", async (req, res) => {
       category: filters.category,
     });
 
-    // Step 3: Score and sort events by hidden gem score
-    const scoredEvents = scoreEvents(events);
+    // Deduplicate by normalized name
+    const seen = new Set();
+    const uniqueEvents = events.filter((e) => {
+      const key = e.name.toLowerCase().trim().slice(0, 30);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+
+    // Step 4: Score and sort events by hidden gem score
+    const scoredEvents = scoreEvents(uniqueEvents);
 
     res.json({
       filters,

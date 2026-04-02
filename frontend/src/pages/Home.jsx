@@ -32,7 +32,7 @@ export default function Home() {
         Event<span className="text-indigo-400">Near</span>
       </h1>
       <p className="text-gray-400 text-lg mb-10 text-center max-w-md">
-        Describe your ideal night in plain English. We'll find the perfect event.
+        Describe your ideal night. We'll find the perfect event.
       </p>
 
       {/* Search box */}
