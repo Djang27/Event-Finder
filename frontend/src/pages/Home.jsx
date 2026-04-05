@@ -13,10 +13,14 @@ export default function Home() {
   }
 
   const suggestions = [
-    "something chill and free this weekend",
-    "live jazz in a small venue tonight",
-    "outdoor concerts under $20",
-    "hidden local art shows this week",
+    "live music this week",
+    "NBA games this week",
+    "something chill and free this week",
+    "comedy shows this week",
+    "hidden local art shows",
+    "outdoor concerts",
+    "jazz in a small venue",
+    "something fun on Friday night",
   ];
 
   return (

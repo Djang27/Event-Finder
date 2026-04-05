@@ -1,12 +1,13 @@
 function scoreEvent(event) {
-  let score = 0;
+  let score = 50; // start neutral
 
-  // Free or cheap ticket
-  if (event.price === null || event.price === 0) score += 15;
-  else if (event.price < 15) score += 25;
-  else if (event.price < 30) score += 10;
+  const promoter = (event.promoter || "").toLowerCase();
+  const venue = (event.venue || "").toLowerCase();
+  const name = (event.name || "").toLowerCase();
 
-  // Not a major national promoter
+  // --- PENALTIES (subtract points) ---
+
+  // Major national promoters
   const bigPromoters = [
     "live nation",
     "nba regular season",
@@ -14,45 +15,90 @@ function scoreEvent(event) {
     "mlb",
     "nhl",
     "mls",
+    "wnba",
     "aeg",
     "anschutz",
+    "broadway",
+    "promoted by venue",
   ];
-  const promoter = (event.promoter || "").toLowerCase();
-  const isBigPromoter = bigPromoters.some((p) => promoter.includes(p));
-  if (!isBigPromoter) score += 20;
+  if (bigPromoters.some((p) => promoter.includes(p))) score -= 30;
 
-  // Came from Eventbrite (more community-driven) vs Ticketmaster
-  if (event.source === "eventbrite") score += 10;
+  // Major venues
+  const bigVenues = [
+    "crypto.com",
+    "sofi stadium",
+    "dodger stadium",
+    "hollywood bowl",
+    "staples",
+    "kia forum",
+    "banc of california",
+    "rose bowl",
+  ];
+  if (bigVenues.some((v) => venue.includes(v))) score -= 25;
 
-  // No promoter at all — likely self-promoted / grassroots
-  if (!event.promoter) score += 15;
+  // Big touring acts
+  const mainstreamKeywords = [
+    "world tour",
+    "stadium tour",
+    "arena tour",
+  ];
+  if (mainstreamKeywords.some((k) => name.includes(k))) score -= 15;
 
-  // Name contains indie/community signals
+  // --- BONUSES (add points) ---
+
+  // No promoter at all — self-promoted / grassroots
+  if (!event.promoter) score += 20;
+
+  // Genuinely indie/community keywords in the name
   const indieKeywords = [
     "benefit",
-    "presents",
-    "anniversary",
-    "tour",
     "showcase",
     "open mic",
     "pop-up",
     "popup",
     "community",
-    "local",
     "indie",
     "underground",
+    "fundraiser",
+    "presents:",
+    "local",
+    "diy",
+    "zine",
+    "art show",
+    "gallery",
+    "workshop",
   ];
-  const name = (event.name || "").toLowerCase();
-  const hasIndieKeyword = indieKeywords.some((k) => name.includes(k));
-  if (hasIndieKeyword) score += 15;
+  if (indieKeywords.some((k) => name.includes(k))) score += 20;
 
-  // Cap score at 100
-  score = Math.min(score, 100);
+  // Small/independent venue signals
+  const smallVenueKeywords = [
+    "cafe",
+    "bar",
+    "lounge",
+    "club",
+    "theater",
+    "theatre",
+    "gallery",
+    "studio",
+    "space",
+    "room",
+    "hall",
+    "lodge",
+    "inn",
+  ];
+  if (smallVenueKeywords.some((v) => venue.includes(v))) score += 15;
+
+  // KCRW, NPR, community radio presented events are always gems
+  const communityPresenters = ["kcrw", "kpcc", "npr", "dublab"];
+  if (communityPresenters.some((p) => name.includes(p))) score += 20;
+
+  // Cap between 0 and 100
+  score = Math.max(0, Math.min(score, 100));
 
   return {
     ...event,
     gemScore: score,
-    isHiddenGem: score >= 40,
+    isHiddenGem: score >= 55,
   };
 }
 

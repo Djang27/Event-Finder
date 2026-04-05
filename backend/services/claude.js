@@ -27,14 +27,13 @@ Use this exact format:
 }
 
 Rules:
-- city: default to "Los Angeles" if not specified
+- city: default to "Los Angeles" if not specified. If the user mentions a specific sports team or artist, set city to null so the search is nationwide. If the user mentions a city explicitly (e.g. "in New York", "in Chicago"), use that city.
 - category: one of "music", "sports", "arts", "food", "comedy", or null
-- keyword: a specific search term to pass to the event API, e.g. "basketball", "jazz", "comedy show". Use this for specific genres, sports, or artists.
+- keyword: ONLY use this for specific genres, sports teams, or artist names (e.g. "jazz", "Lakers", "Kendrick Lamar"). Do NOT set keyword for generic terms like "live music", "concerts", "shows", or "events" — leave it null and let category handle those.
 - maxPrice: a number or null if not specified
 - preferHiddenGems: true if user mentions words like "hidden", "local", "underground", "small", "indie"
 - mood: a short description of the vibe the user wants
-- startDate/endDate: ONLY set these if the user explicitly mentions a time like "tonight", "this weekend", "next week", "Friday", "tomorrow". If no time is mentioned, set both to null. Format: "YYYY-MM-DDT00:00:00Z". Today is ${new Date().toISOString().split("T")[0]}.
-
+- startDate/endDate: ONLY set these if the user explicitly mentions a time like "tonight", "this weekend", "next week", "Friday", "tomorrow". If no time is mentioned, set both to null. For "this weekend" set startDate to today and endDate to at least 3 days from now at 23:59:59Z. For "tonight" use today only. For "this week" or "next week" use the next 7 days. Format: "YYYY-MM-DDT00:00:00Z". Today is ${new Date().toISOString().split("T")[0]}.
 User query: "${userQuery}"`
       }
     ]
