@@ -20,19 +20,20 @@ router.post("/search", async (req, res) => {
       city: filters.city,
       startDate: filters.startDate,
       endDate: filters.endDate,
-      category: filters.category,
+      category: filters.keyword ? null : filters.category,
+      keyword: filters.keyword,
     });
 
-    // Deduplicate by normalized name
+    // Step 3: Deduplicate by first 15 characters of normalized name
     const seen = new Set();
     const uniqueEvents = events.filter((e) => {
-      const key = e.name.toLowerCase().trim().slice(0, 30);
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
+    const key = `${e.name.toLowerCase().trim().slice(0, 15)}-${e.date}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
     });
 
-    // Step 4: Score and sort events by hidden gem score
+    // Step 4: Score and sort events by date
     const scoredEvents = scoreEvents(uniqueEvents);
 
     res.json({

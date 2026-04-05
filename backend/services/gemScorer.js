@@ -59,7 +59,7 @@ function scoreEvent(event) {
 function scoreEvents(events) {
   return events
     .map(scoreEvent)
-    .sort((a, b) => b.gemScore - a.gemScore);
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
 }
 
 module.exports = { scoreEvents };

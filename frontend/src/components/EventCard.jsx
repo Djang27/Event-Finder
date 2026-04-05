@@ -43,18 +43,15 @@ export default function EventCard({ event }) {
               📍 {event.venue}
             </p>
           )}
-          <p className="text-gray-400 text-sm">
-            🎟️ {event.price ? `From $${event.price}` : "Price TBD"}
-          </p>
         </div>
 
-          <a
+        <a
           href={event.url}
           target="_blank"
           rel="noreferrer"
           className="block text-center bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold py-2.5 rounded-xl transition"
         >
-          Get Tickets
+          View Details
         </a>
       </div>
     </div>
