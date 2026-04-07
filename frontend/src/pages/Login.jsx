@@ -2,6 +2,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 
+const ALLOWED_REDIRECTS = ["/", "/saved", "/results"];
+
+function safeRedirect(navigate, path) {
+  if (ALLOWED_REDIRECTS.includes(path)) {
+    navigate(path);
+  } else {
+    navigate("/");
+  }
+}
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,7 +31,7 @@ export default function Login() {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
       }
-      navigate("/");
+      safeRedirect(navigate, "/");
     } catch (err) {
       setError(err.message);
     } finally {
