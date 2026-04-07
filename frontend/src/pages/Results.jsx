@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { searchEvents } from "../lib/api";
 import EventCard from "../components/EventCard";
 import MapView from "../components/MapView";
+import Navbar from "../components/Navbar";
 
 export default function Results() {
   const location = useLocation();
@@ -34,20 +35,7 @@ export default function Results() {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
-      {/* Top bar */}
-      <div className="border-b border-gray-800 px-6 py-4 flex items-center justify-between">
-        <button
-          onClick={() => navigate("/")}
-          className="text-gray-400 hover:text-white transition text-sm flex items-center gap-1"
-        >
-          ← EventNear
-        </button>
-        {!loading && (
-          <span className="text-gray-500 text-sm">
-            {events.length} events · {gemCount} hidden gems
-          </span>
-        )}
-      </div>
+      <Navbar />
 
       <div className="max-w-5xl mx-auto px-6 py-8">
         {/* Query display */}
@@ -110,17 +98,26 @@ export default function Results() {
 
         {/* Event grid */}
         {!loading && !error && events.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {events.map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          </div>
+          <>
+            <p className="text-gray-500 text-sm mb-4">
+              {events.length} events · {gemCount} hidden gems
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {events.map((event) => (
+                <EventCard key={event.id} event={event} />
+              ))}
+            </div>
+          </>
         )}
 
         {/* No results */}
         {!loading && !error && events.length === 0 && (
           <div className="text-center py-32">
-            <p className="text-gray-400 mb-4">No events found for that search.</p>
+            <p className="text-4xl mb-4">🔍</p>
+            <p className="text-white font-semibold text-lg mb-2">No events found</p>
+            <p className="text-gray-400 mb-6">
+              Try broadening your search — use "this week" instead of "tonight", or remove specific venue requirements.
+            </p>
             <button
               onClick={() => navigate("/")}
               className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl transition"

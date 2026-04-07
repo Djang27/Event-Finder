@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Results from "./pages/Results";
+import Login from "./pages/Login";
+import Saved from "./pages/Saved";
 
 export default function App() {
   return (
@@ -8,6 +10,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/results" element={<Results />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/saved" element={<Saved />} />
       </Routes>
     </BrowserRouter>
   );
