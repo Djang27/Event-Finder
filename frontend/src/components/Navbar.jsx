@@ -20,6 +20,13 @@ export default function Navbar() {
       </button>
 
       <div className="flex items-center gap-3">
+        <button
+          onClick={() => navigate("/discover")}
+          className="text-gray-400 hover:text-white text-sm transition"
+        >
+          💎 Discover
+        </button>
+
         {user ? (
           <>
             <button

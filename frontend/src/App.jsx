@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Results from "./pages/Results";
 import Login from "./pages/Login";
 import Saved from "./pages/Saved";
+import Discover from "./pages/Discover";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
         <Route path="/results" element={<Results />} />
         <Route path="/login" element={<Login />} />
         <Route path="/saved" element={<Saved />} />
+        <Route path="/discover" element={<Discover />} />
       </Routes>
     </BrowserRouter>
   );
